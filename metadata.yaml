@@ -1,24 +1,36 @@
 # Stand-alone repos
 pr-agent-pro:
-  - "pr-agent-pro"
+ critical_compliance_paths:
+ best_practices_paths:
+   - "pr-agent-pro"
 
 # Repos related to groups
 # frontend_repos
 codium-ai-platform-client:
-  - "groups/frontend_repos"
+ critical_compliance_paths:
+ best_practices_paths:
+   - "groups/frontend_repos"
 
 # backend_repos
 qodo-engine:
-  - "groups/backend_repos"
+ critical_compliance_paths:
+ best_practices_paths:
+   - "groups/backend_repos"
 
 # multi-group repos
 qodo-gen-chat-webview:
-  - "groups/frontend_repos"
-  - "groups/backend_repos"
+ critical_compliance_paths:
+ best_practices_paths:
+   - "groups/frontend_repos"
+   - "groups/backend_repos"
 
 # Monorepos
 pr-agent-devops.pr_agent_app:
-  - "pr-agent-devops/pr_agent_app"
+ critical_compliance_paths:
+ best_practices_paths:
+   - "pr-agent-devops/pr_agent_app"
 
 pr-agent-devops.helm-nextgen-values:
-  - "pr-agent-devops/helm-nextgen-values"
+ critical_compliance_paths:
+ best_practices_paths:
+   - "pr-agent-devops/helm-nextgen-values"
