@@ -16,6 +16,7 @@ qodo-engine:
  critical_compliance_paths:
  best_practices_paths:
    - "groups/backend_repos"
+   - "groups/frontend_repos"  # check for duplicated file reads on multi-group repos
 
 # multi-group repos
 qodo-gen-chat-webview:
