@@ -39,11 +39,11 @@ qodo-gen-chat-webview:
 pr-agent-devops:
  critical_compliance_paths:
  best_practices_paths:
-   - "pr-agent-devops/pr_agent_app"
+   - "pr-agent-devops"
  monorepo_subprojects:
     pr_agent_app:  # longer path is optional (e.g. pr_agent_app/my_project)
       best_practices_paths:
         - "pr-agent-devops/pr_agent_app"
     helm-nextgen-values:
       best_practices_paths:
-        - "pr-agent-devops/pr_agent_app"
+        - "pr-agent-devops/helm-nextgen-values"
