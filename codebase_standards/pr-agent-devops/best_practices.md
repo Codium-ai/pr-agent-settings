@@ -1,0 +1,1 @@
+monorepo root best bractices
