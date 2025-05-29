@@ -41,7 +41,7 @@ pr-agent-devops:
  best_practices_paths:
    - "pr-agent-devops/pr_agent_app"
  monorepo_subprojects:
-    pr_agent_app:  # longer path are optional (e.g. pr_agent_app/my_project)
+    pr_agent_app:  # longer path is optional (e.g. pr_agent_app/my_project)
       best_practices_paths:
         - "pr-agent-devops/pr_agent_app"
     helm-nextgen-values:
