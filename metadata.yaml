@@ -26,12 +26,24 @@ qodo-gen-chat-webview:
    - "groups/frontend_repos"  # check for duplicated file reads on multi-group repos
 
 # Monorepos
-pr-agent-devops/pr_agent_app:
+# pr-agent-devops/pr_agent_app:
+#  critical_compliance_paths:
+#  best_practices_paths:
+#    - "pr-agent-devops/pr_agent_app"
+
+# pr-agent-devops/helm-nextgen-values:
+#  critical_compliance_paths:
+#  best_practices_paths:
+#    - "pr-agent-devops/helm-nextgen-values"
+
+pr-agent-devops:
  critical_compliance_paths:
  best_practices_paths:
    - "pr-agent-devops/pr_agent_app"
-
-pr-agent-devops/helm-nextgen-values:
- critical_compliance_paths:
- best_practices_paths:
-   - "pr-agent-devops/helm-nextgen-values"
+ monorepo_subdirectories:
+    pr_agent_app/ss:
+      best_practices_paths:
+        - "pr-agent-devops/pr_agent_app"
+    helm-nextgen-values:
+      best_practices_paths:
+        - "pr-agent-devops/pr_agent_app"
