@@ -12,7 +12,7 @@ Failure Criteria:
 - Minimal or unstructured logging
 - Lack of actionable error details
 
-### Compliance Verification:
+Code example
 
 ```python
 def verify_logging_compliance(log_entry):
