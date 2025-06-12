@@ -14,7 +14,7 @@ Failure Criteria:
 - Exposure of sensitive data
 - Blocking main execution thread
 
-Code example
+Code example:
 
 ```python
 def verify_logging_performance(log_time, sensitive_data):

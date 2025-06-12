@@ -14,7 +14,7 @@ Failure Criteria:
 - Missing performance metrics
 - Inability to identify resource-intensive operations
 
-Code example
+Code example:
 
 ```python
 def check_resource_consumption_compliance(resource_metrics):
