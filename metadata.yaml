@@ -1,40 +1,48 @@
 # Stand-alone repos
 pr-agent-pro:
- critical_compliance_paths:
+ compliance_paths:
+   - "pr-agent-pro"
  best_practices_paths:
    - "pr-agent-pro"
 
 # Repos related to groups
 # frontend_repos
 codium-ai-platform-client:
- critical_compliance_paths:
+ compliance_paths:
+   - "groups/frontend_repos"
  best_practices_paths:
    - "groups/frontend_repos"
 
 # backend_repos
 qodo-engine:
- critical_compliance_paths:
+ compliance_paths:
+   - "groups/backend_repos"
  best_practices_paths:
    - "groups/backend_repos"
 
 # multi-group repos
 qodo-gen-chat-webview:
- critical_compliance_paths:
+ compliance_paths:
+   - "groups/frontend_repos"
+   - "groups/backend_repos"
  best_practices_paths:
    - "groups/frontend_repos"
    - "groups/backend_repos"
    - "groups/frontend_repos"  # check for duplicated file reads on multi-group repos
 
 pr-agent-devops:
- critical_compliance_paths:
+ compliance_paths:
+   - "pr-agent-devops"
  best_practices_paths:
    - "pr-agent-devops"
  monorepo_subprojects:
     pr_agent_app:  # longer path is optional (e.g. pr_agent_app/my_project)
-      critical_compliance_paths:
+      compliance_paths:
+        - "pr-agent-devops/pr_agent_app"
       best_practices_paths:
         - "pr-agent-devops/pr_agent_app"
     helm-nextgen-values:
-      critical_compliance_paths:
+      compliance_paths:
+        - "pr-agent-devops/helm-nextgen-values"
       best_practices_paths:
         - "pr-agent-devops/helm-nextgen-values"
