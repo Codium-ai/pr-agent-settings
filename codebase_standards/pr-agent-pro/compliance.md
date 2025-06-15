@@ -1,8 +1,4 @@
-# Logging Compliance Checklist
-
-[... Previous 6 Compliances ...]
-
-## <b>Compliance 7: Distributed System Tracing</b>
+<b>Compliance 7: Distributed System Tracing</b>
 
 is_blocker: True
 
