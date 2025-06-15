@@ -1,5 +1,5 @@
-[config]
-disable_auto_feedback = true
+# [config]
+# disable_auto_feedback = true
 
 [pr_reviewer]
 enable_review_labels_effort = true
