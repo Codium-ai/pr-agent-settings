@@ -1,5 +1,5 @@
 pr_compliances:
-  - name: "Compliance 2: Granular Exception Handling"
+  - title: "Compliance 2: Granular Exception Handling"
     is_blocker: false
     event: "Multi-step operations with potential failure modes"
     success_criteria: "Type-specific exception handling and differentiated error responses"

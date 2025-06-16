@@ -1,5 +1,5 @@
 pr_compliances:
-  - name: "Compliance 6: Resource Consumption Monitoring"
+  - title: "Compliance 6: Resource Consumption Monitoring"
     is_blocker: false
     event: "Long-running operations and resource-intensive processes"
     success_criteria: "Tracking of resource utilization and performance metrics"

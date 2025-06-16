@@ -1,5 +1,5 @@
 pr_compliances:
-  - name: "Compliance 5: Audit Trail Integrity"
+  - title: "Compliance 5: Audit Trail Integrity"
     is_blocker: true
     event: "Critical system changes and user actions"
     success_criteria: "Comprehensive tracking of system modifications with immutable and tamper-evident logging"

@@ -1,5 +1,5 @@
 pr_compliances:
-  - name: "Compliance 3: Performance and Security Logging"
+  - title: "Compliance 3: Performance and Security Logging"
     is_blocker: true
     event: "Critical operations with performance or security implications"
     success_criteria: "Non-blocking logging mechanism with minimal performance overhead and secure handling of sensitive information"

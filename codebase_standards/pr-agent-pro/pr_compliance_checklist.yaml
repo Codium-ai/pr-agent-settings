@@ -1,5 +1,5 @@
 pr_compliances:
-  - name: "Compliance 7: Distributed System Tracing"
+  - title: "Compliance 7: Distributed System Tracing"
     is_blocker: true
     event: "Microservices and distributed system interactions"
     success_criteria: "End-to-end request tracing with correlation of actions across multiple services and comprehensive distributed context preservation"

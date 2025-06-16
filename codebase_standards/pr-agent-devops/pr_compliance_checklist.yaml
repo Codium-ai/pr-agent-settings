@@ -1,5 +1,5 @@
 pr_compliances:
-  - name: "Compliance 4: Data Validation Logging"
+  - title: "Compliance 4: Data Validation Logging"
     is_blocker: true
     event: "Input processing and validation in data-critical systems"
     success_criteria: "Comprehensive input validation with detailed logging of validation failures and prevention of invalid data processing"
