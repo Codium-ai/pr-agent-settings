@@ -1,0 +1,21 @@
+pr_compliances:
+  - name: "Compliance 4: Data Validation Logging"
+    is_blocker: true
+    event: "Input processing and validation in data-critical systems"
+    success_criteria: "Comprehensive input validation with detailed logging of validation failures and prevention of invalid data processing"
+    failure_criteria: "Bypassing validation checks or silent failures in validation processes"
+    code_example: |
+      def validate_input_compliance(validation_results):
+          return all(validation_results.values())
+
+      def process_user_input(user_data):
+          validation_results = {
+              'type_check': isinstance(user_data, dict),
+              'required_fields': all(field in user_data for field in ['name', 'email'])
+          }
+          
+          if not validate_input_compliance(validation_results):
+              logger.warning("Input validation failed", extra=validation_results)
+              raise ValidationError("Invalid input data")
+          
+          return process_data(user_data)

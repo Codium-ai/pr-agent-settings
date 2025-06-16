@@ -1,0 +1,32 @@
+pr_compliances:
+  - name: "Compliance 6: Resource Consumption Monitoring"
+    is_blocker: false
+    event: "Long-running operations and resource-intensive processes"
+    success_criteria: "Tracking of resource utilization and performance metrics"
+    failure_criteria: "Lack of resource consumption tracking or missing performance metrics"
+    code_example: |
+      def check_resource_consumption_compliance(resource_metrics):
+          return (
+              resource_metrics['cpu_usage'] is not None and
+              resource_metrics['memory_usage'] is not None
+          )
+
+      def execute_complex_operation(operation):
+          resource_metrics = {
+              'cpu_usage': measure_cpu_usage(),
+              'memory_usage': measure_memory_usage()
+          }
+          
+          try:
+              result = operation()
+              
+              if not check_resource_consumption_compliance(resource_metrics):
+                  logger.warning("Resource monitoring incomplete", extra=resource_metrics)
+              
+              return result
+          except Exception as e:
+              logger.error("Operation failed", extra={
+                  'error': str(e),
+                  'resource_metrics': resource_metrics
+              })
+              raise

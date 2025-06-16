@@ -1,0 +1,23 @@
+pr_compliances:
+  - name: "Compliance 5: Audit Trail Integrity"
+    is_blocker: true
+    event: "Critical system changes and user actions"
+    success_criteria: "Comprehensive tracking of system modifications with immutable and tamper-evident logging"
+    failure_criteria: "Incomplete action logging or modifiable audit logs"
+    code_example: |
+      def verify_audit_trail_compliance(audit_entry):
+          required_keys = ['user_id', 'action', 'timestamp', 'integrity_hash']
+          return all(key in audit_entry for key in required_keys)
+
+      def log_system_action(user_id, action):
+          audit_entry = {
+              'user_id': user_id,
+              'action': action,
+              'timestamp': get_current_timestamp(),
+              'integrity_hash': generate_integrity_hash(action)
+          }
+          
+          if verify_audit_trail_compliance(audit_entry):
+              audit_logger.info("System action recorded", extra=audit_entry)
+          else:
+              logger.warning("Audit trail compliance check failed")

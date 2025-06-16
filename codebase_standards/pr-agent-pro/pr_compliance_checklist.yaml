@@ -1,0 +1,30 @@
+pr_compliances:
+  - name: "Compliance 7: Distributed System Tracing"
+    is_blocker: true
+    event: "Microservices and distributed system interactions"
+    success_criteria: "End-to-end request tracing with correlation of actions across multiple services and comprehensive distributed context preservation"
+    failure_criteria: "Loss of request context between services or inability to track request flow"
+    code_example: |
+      def verify_distributed_tracing(trace_context):
+          required_keys = ['trace_id', 'parent_span_id', 'service_name']
+          return all(key in trace_context for key in required_keys)
+
+      def process_distributed_request(request):
+          trace_context = {
+              'trace_id': generate_trace_id(),
+              'parent_span_id': get_current_span_id(),
+              'service_name': 'user-service'
+          }
+          
+          try:
+              if verify_distributed_tracing(trace_context):
+                  logger.info("Distributed request processing", extra=trace_context)
+              
+              result = forward_request_to_next_service(request, trace_context)
+              return result
+          except Exception as e:
+              logger.error("Distributed request failed", extra={
+                  'trace_context': trace_context,
+                  'error': str(e)
+              })
+              raise
