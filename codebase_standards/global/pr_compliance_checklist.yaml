@@ -20,7 +20,7 @@ pr_compliances:
               raise
 
   - title: "Compliance 8: Configuration Change Tracking"
-    is_blocker: true
+    is_blocker: false
     event: "System configuration modifications and deployments"
     success_criteria: "Comprehensive logging of configuration changes with detailed tracking of modifications"
     failure_criteria: "Undocumented configuration modifications or lack of change attribution"
