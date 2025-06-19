@@ -30,20 +30,20 @@ pr_compliances:
               raise
 
   - title: "Compliance 10: Frontend Button State Synchronization"
-      is_blocker: false
-      event: "Interactive button state changes and visual feedback in web UI"
-      success_criteria: "Button visually updates within 150ms, maintains consistent state between frontend display and backend model, and prevents double-clicks during processing"
-      failure_criteria: "Button state desynchronization, visual lag exceeding 150ms, or multiple callback executions from rapid clicks"
-      code_example: |
-        from bokeh.models import Button, CustomJS
-        from time import time
-        
-        def verify_button_state_sync(button, callback_log):
-            button.js_on_click(CustomJS(code="this.disabled = true; this.label = 'Processing...'"))
-            click_time = time()
-            
-            state_changes = [log for log in callback_log if log['timestamp'] - click_time < 0.15]
-            double_clicks = len([log for log in callback_log if log['event'] == 'click']) > 1
-            
-            return (len(state_changes) > 0 and not double_clicks and 
-                    button.disabled and button.label == 'Processing...')
+    is_blocker: false
+    event: "Interactive button state changes and visual feedback in web UI"
+    success_criteria: "Button visually updates within 150ms, maintains consistent state between frontend display and backend model, and prevents double-clicks during processing"
+    failure_criteria: "Button state desynchronization, visual lag exceeding 150ms, or multiple callback executions from rapid clicks"
+    code_example: |
+      from bokeh.models import Button, CustomJS
+      from time import time
+      
+      def verify_button_state_sync(button, callback_log):
+          button.js_on_click(CustomJS(code="this.disabled = true; this.label = 'Processing...'"))
+          click_time = time()
+          
+          state_changes = [log for log in callback_log if log['timestamp'] - click_time < 0.15]
+          double_clicks = len([log for log in callback_log if log['event'] == 'click']) > 1
+          
+          return (len(state_changes) > 0 and not double_clicks and 
+                  button.disabled and button.label == 'Processing...')
