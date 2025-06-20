@@ -29,21 +29,38 @@ pr_compliances:
               })
               raise
 
-
-  - title: "Compliance 10: Hierarchical File Structure Verification"
-    is_blocker: false
-    event: "File system operations involving nested directory structures and path traversal"
-    success_criteria: "Correct navigation through directory hierarchy, proper parent-child relationships maintained, and accurate path resolution without directory traversal vulnerabilities"
-    failure_criteria: "Broken symbolic links, incorrect relative path resolution, or unauthorized access to parent directories"
+  - title: "Compliance 10: Cross-Repository Security and Information Isolation"
+    is_blocker: true
+    event: "Reading compliance files from global settings repositories, local repositories, and wikis across different projects with varying access permissions"
+    success_criteria: "Compliance checks from one repository cannot expose sensitive information to unauthorized users in other repositories. Proper isolation between different organizations' compliance rules when using shared global settings"
+    failure_criteria: "Information leakage between repositories, ability to access compliance rules from restricted repositories, or exposure of sensitive compliance criteria to unauthorized users"
     code_example: |
-      from pathlib import Path
-      
-      def verify_hierarchy(root_path, structure):
-          root = Path(root_path)
-          for rel_path, props in structure.items():
-              path = root / rel_path
-              if not path.exists() or (props['type'] == 'dir') != path.is_dir():
-                  return False
-              if not path.resolve().is_relative_to(root.resolve()):
-                  return False  # Path traversal detected
-          return True
+      def test_cross_repository_isolation():
+          org_a_compliance = create_sensitive_compliance("org_a/settings")
+          org_b_pr = create_pr("org_b/project")
+          
+          with mock_user("org_b_developer"):
+              results = process_pr_with_compliance(org_b_pr)
+              assert "org_a" not in str(results)
+              assert not has_leaked_sensitive_rules(results, org_a_compliance)
+              
+          forked_repo = fork_repository("org_a/project", "external/fork")
+          assert get_compliance_for_repo(forked_repo) != org_a_compliance
+
+  - title: "Compliance 11: Production Scale Performance and Resource Management"
+    is_blocker: true
+    event: "Processing PRs in large enterprise environments with hundreds of compliance rules across multiple hierarchical configuration files while handling concurrent PR submissions"
+    success_criteria: "PR processing completes within SLA (30 seconds) for 95th percentile, no memory leaks, graceful degradation under load, proper caching of compliance rules"
+    failure_criteria: "PR processing timeouts, service outages during peak hours, cascading failures when global settings repository is slow/unavailable"
+    code_example: |
+      def test_production_scale_performance():
+          env = setup_production_env(repos=1000, rules=500, concurrent_prs=50)
+          baseline = measure_pr_processing(env, compliance_enabled=False)
+          metrics = measure_pr_processing(env, compliance_enabled=True)
+          
+          assert metrics.p95_latency < 30000  # 30 seconds
+          assert metrics.avg_latency / baseline.avg_latency < 2.0
+          assert metrics.peak_memory_mb < 4096 and metrics.file_handles_leaked == 0
+          
+          simulate_global_repo_outage(env)
+          assert measure_pr_processing(env).success_rate > 0.95
