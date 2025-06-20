@@ -29,21 +29,21 @@ pr_compliances:
               })
               raise
 
-  - title: "Compliance 10: Frontend Button State Synchronization"
+
+  - title: "Compliance 10: Hierarchical File Structure Verification"
     is_blocker: false
-    event: "Interactive button state changes and visual feedback in web UI"
-    success_criteria: "Button visually updates within 150ms, maintains consistent state between frontend display and backend model, and prevents double-clicks during processing"
-    failure_criteria: "Button state desynchronization, visual lag exceeding 150ms, or multiple callback executions from rapid clicks"
+    event: "File system operations involving nested directory structures and path traversal"
+    success_criteria: "Correct navigation through directory hierarchy, proper parent-child relationships maintained, and accurate path resolution without directory traversal vulnerabilities"
+    failure_criteria: "Broken symbolic links, incorrect relative path resolution, or unauthorized access to parent directories"
     code_example: |
-      from bokeh.models import Button, CustomJS
-      from time import time
+      from pathlib import Path
       
-      def verify_button_state_sync(button, callback_log):
-          button.js_on_click(CustomJS(code="this.disabled = true; this.label = 'Processing...'"))
-          click_time = time()
-          
-          state_changes = [log for log in callback_log if log['timestamp'] - click_time < 0.15]
-          double_clicks = len([log for log in callback_log if log['event'] == 'click']) > 1
-          
-          return (len(state_changes) > 0 and not double_clicks and 
-                  button.disabled and button.label == 'Processing...')
+      def verify_hierarchy(root_path, structure):
+          root = Path(root_path)
+          for rel_path, props in structure.items():
+              path = root / rel_path
+              if not path.exists() or (props['type'] == 'dir') != path.is_dir():
+                  return False
+              if not path.resolve().is_relative_to(root.resolve()):
+                  return False  # Path traversal detected
+          return True
