@@ -29,7 +29,6 @@ pr_compliances:
               })
               raise
 
-pr_compliances:
   - title: "Compliance 10: Cross-Repository Security and Information Isolation"
     is_blocker: true
     event: "Reading compliance files from global settings repositories, local repositories, and wikis across different projects with varying access permissions"
