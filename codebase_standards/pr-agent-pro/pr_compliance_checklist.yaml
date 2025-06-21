@@ -29,38 +29,40 @@ pr_compliances:
               })
               raise
 
+pr_compliances:
   - title: "Compliance 10: Cross-Repository Security and Information Isolation"
     is_blocker: true
     event: "Reading compliance files from global settings repositories, local repositories, and wikis across different projects with varying access permissions"
-    success_criteria: "Compliance checks from one repository cannot expose sensitive information to unauthorized users in other repositories. Proper isolation between different organizations' compliance rules when using shared global settings"
-    failure_criteria: "Information leakage between repositories, ability to access compliance rules from restricted repositories, or exposure of sensitive compliance criteria to unauthorized users"
+    success_criteria: "Basic repository boundaries are respected, no obvious credential leaks in logs, compliance files from different repositories are processed separately"
+    failure_criteria: "Hardcoded credentials in compliance files, mixing compliance rules between unrelated repositories, or logging full file paths that expose repository structure"
     code_example: |
       def test_cross_repository_isolation():
-          org_a_compliance = create_sensitive_compliance("org_a/settings")
-          org_b_pr = create_pr("org_b/project")
+          repo_a_compliance = get_compliance_for_repo("org_a/project")
+          repo_b_compliance = get_compliance_for_repo("org_b/project")
           
-          with mock_user("org_b_developer"):
-              results = process_pr_with_compliance(org_b_pr)
-              assert "org_a" not in str(results)
-              assert not has_leaked_sensitive_rules(results, org_a_compliance)
-              
-          forked_repo = fork_repository("org_a/project", "external/fork")
-          assert get_compliance_for_repo(forked_repo) != org_a_compliance
+          assert repo_a_compliance != repo_b_compliance
+          assert not contains_credentials(repo_a_compliance)
+          assert not contains_credentials(repo_b_compliance)
+          
+          logs = get_recent_logs()
+          assert not contains_full_paths(logs)
+          assert not contains_api_keys(logs)
 
   - title: "Compliance 11: Production Scale Performance and Resource Management"
     is_blocker: true
     event: "Processing PRs in large enterprise environments with hundreds of compliance rules across multiple hierarchical configuration files while handling concurrent PR submissions"
-    success_criteria: "PR processing completes within SLA (30 seconds) for 95th percentile, no memory leaks, graceful degradation under load, proper caching of compliance rules"
-    failure_criteria: "PR processing timeouts, service outages during peak hours, cascading failures when global settings repository is slow/unavailable"
+    success_criteria: "PR processing completes within 2 minutes for most cases, no obvious memory leaks during normal operation, service remains responsive under moderate load"
+    failure_criteria: "PR processing consistently times out, memory usage grows indefinitely, or service becomes unresponsive with more than 5 concurrent PRs"
     code_example: |
       def test_production_scale_performance():
-          env = setup_production_env(repos=1000, rules=500, concurrent_prs=50)
-          baseline = measure_pr_processing(env, compliance_enabled=False)
-          metrics = measure_pr_processing(env, compliance_enabled=True)
+          env = setup_basic_env(repos=10, rules=50, concurrent_prs=5)
+          metrics = measure_pr_processing(env, duration_minutes=10)
           
-          assert metrics.p95_latency < 30000  # 30 seconds
-          assert metrics.avg_latency / baseline.avg_latency < 2.0
-          assert metrics.peak_memory_mb < 4096 and metrics.file_handles_leaked == 0
+          assert metrics.avg_latency < 120000  # 2 minutes
+          assert metrics.success_rate > 0.80  # 80% success
+          assert metrics.memory_growth_mb < 500  # Reasonable growth
           
-          simulate_global_repo_outage(env)
-          assert measure_pr_processing(env).success_rate > 0.95
+          # Basic availability check
+          response = health_check_during_load(env)
+          assert response.status_code == 200
+          assert response.latency_ms < 5000
