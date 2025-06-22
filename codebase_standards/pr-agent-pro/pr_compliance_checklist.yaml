@@ -1,5 +1,5 @@
 pr_compliances:
-  - title: "Compliance 7: Distributed System Tracing"
+  - title: "Distributed System Tracing"
     is_blocker: true
     event: "Microservices and distributed system interactions"
     success_criteria: "End-to-end request tracing with correlation of actions across multiple services and comprehensive distributed context preservation"
@@ -29,7 +29,7 @@ pr_compliances:
               })
               raise
 
-  - title: "Compliance 10: Cross-Repository Security and Information Isolation"
+  - title: "Cross-Repository Security and Information Isolation"
     is_blocker: true
     event: "Reading compliance files from global settings repositories, local repositories, and wikis across different projects with varying access permissions"
     success_criteria: "Basic repository boundaries are respected, no obvious credential leaks in logs, compliance files from different repositories are processed separately"
@@ -47,7 +47,7 @@ pr_compliances:
           assert not contains_full_paths(logs)
           assert not contains_api_keys(logs)
 
-  - title: "Compliance 11: Production Scale Performance and Resource Management"
+  - title: "Production Scale Performance and Resource Management"
     is_blocker: true
     event: "Processing PRs in large enterprise environments with hundreds of compliance rules across multiple hierarchical configuration files while handling concurrent PR submissions"
     success_criteria: "PR processing completes within 2 minutes for most cases, no obvious memory leaks during normal operation, service remains responsive under moderate load"
