@@ -1,5 +1,5 @@
 pr_compliances:
-  - title: "Compliance 1: Contextual Error Logging"
+  - title: "Contextual Error Logging"
     is_blocker: true
     event: "Exception handling in critical system paths"
     success_criteria: "Comprehensive logging with rich contextual information with the ability to reconstruct error scenarios"
@@ -19,7 +19,7 @@ pr_compliances:
               
               raise
 
-  - title: "Compliance 8: Configuration Change Tracking"
+  - title: "Configuration Change Tracking"
     is_blocker: false
     event: "System configuration modifications and deployments"
     success_criteria: "Comprehensive logging of configuration changes with detailed tracking of modifications"
