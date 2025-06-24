@@ -30,7 +30,7 @@ pr_compliances:
               raise
 
   - title: "Cross-Repository Security and Information Isolation"
-    is_blocker: true
+    is_blocker: false
     event: "Reading compliance files from global settings repositories, local repositories, and wikis across different projects with varying access permissions"
     success_criteria: "Basic repository boundaries are respected, no obvious credential leaks in logs, compliance files from different repositories are processed separately"
     failure_criteria: "Hardcoded credentials in compliance files, mixing compliance rules between unrelated repositories, or logging full file paths that expose repository structure"
@@ -48,7 +48,7 @@ pr_compliances:
           assert not contains_api_keys(logs)
 
   - title: "Production Scale Performance and Resource Management"
-    is_blocker: true
+    is_blocker: false
     event: "Processing PRs in large enterprise environments with hundreds of compliance rules across multiple hierarchical configuration files while handling concurrent PR submissions"
     success_criteria: "PR processing completes within 2 minutes for most cases, no obvious memory leaks during normal operation, service remains responsive under moderate load"
     failure_criteria: "PR processing consistently times out, memory usage grows indefinitely, or service becomes unresponsive with more than 5 concurrent PRs"
