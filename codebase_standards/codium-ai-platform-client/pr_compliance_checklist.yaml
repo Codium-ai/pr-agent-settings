@@ -37,3 +37,23 @@ pr_compliances:
       }), [size, isActive]);
       
       return <div style={divStyle}>Content</div>;
+
+  - title: "Compliance 3: Centralized Translation String Usage"
+    is_blocker: true
+    event: "Static strings in React components that should be translatable"
+    success_criteria: "All user-facing strings must use centrally defined translation keys from translation JSON files"
+    failure_criteria: "Static strings hardcoded in components instead of using translation system"
+    code_example: |
+      // BAD: Hardcoded static strings
+      <button>Save Changes</button>
+      <p>Please enter a valid email address</p>
+      const errorMessage = "Something went wrong";
+
+      // GOOD: Using translation keys
+      <button>{t('common.saveChanges')}</button>
+      <p>{t('validation.invalidEmail')}</p>
+      const errorMessage = t('errors.genericError');
+
+      // GOOD: Using translation hook with proper key structure
+      const { t } = useTranslation();
+      const confirmMessage = t('dialogs.confirmDelete', { itemName });
