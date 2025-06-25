@@ -1,13 +1,12 @@
 pr_compliances:
-  - title: "Contextual Error Logging"
+  - title: "try-except for API calls"
     compliance_label: true
-    objective: "When handling exceptions in critical system paths, always include comprehensive logging with rich contextual information"
-    success_criteria: "Comprehensive logging with rich contextual information with the ability to reconstruct error scenarios"
-    failure_criteria: "Minimal or unstructured logging that lacks actionable error details"
+    objective: "When calling an API, always wrap it with try-except"
+    success_criteria: "API calls wrapped with a try-except"
+    failure_criteria: "API calls that are not wrapped with a try-except"
 
-  - title: "Configuration Change Tracking"
+  - title: "When relevant, utilize early return"
     compliance_label: false
-    objective: "When modifying system configurations or deployments, ensure comprehensive logging of all changes with detailed tracking"
-    success_criteria: "Comprehensive logging of configuration changes with detailed tracking of modifications"
-    failure_criteria: "Undocumented configuration modifications or lack of change attribution"
-    
+    objective: "In a code snippet containing multiple logic conditions (such as 'if-else'), prefer an early return on edge cases than deep nesting"
+    success_criteria: "When relevant, utilize early return that reduces nesting"
+    failure_criteria: "Unjustified deep nesting that can be simplified by early return"
