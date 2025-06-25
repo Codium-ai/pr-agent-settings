@@ -1,67 +1,12 @@
 pr_compliances:
-  - title: "Distributed System Tracing"
-    is_blocker: true
-    event: "Microservices and distributed system interactions"
-    success_criteria: "End-to-end request tracing with correlation of actions across multiple services and comprehensive distributed context preservation"
-    failure_criteria: "Loss of request context between services or inability to track request flow"
-    code_example: |
-      def verify_distributed_tracing(trace_context):
-          required_keys = ['trace_id', 'parent_span_id', 'service_name']
-          return all(key in trace_context for key in required_keys)
+  - title: "try-except for API calls"
+    compliance_label: true
+    objective: "When calling an API, always wrap it with try-except"
+    success_criteria: "API calls wrapped with a try-except"
+    failure_criteria: "API calls that are not wrapped with a try-except"
 
-      def process_distributed_request(request):
-          trace_context = {
-              'trace_id': generate_trace_id(),
-              'parent_span_id': get_current_span_id(),
-              'service_name': 'user-service'
-          }
-          
-          try:
-              if verify_distributed_tracing(trace_context):
-                  logger.info("Distributed request processing", extra=trace_context)
-              
-              result = forward_request_to_next_service(request, trace_context)
-              return result
-          except Exception as e:
-              logger.error("Distributed request failed", extra={
-                  'trace_context': trace_context,
-                  'error': str(e)
-              })
-              raise
-
-  - title: "Cross-Repository Security and Information Isolation"
-    is_blocker: false
-    event: "Reading compliance files from global settings repositories, local repositories, and wikis across different projects with varying access permissions"
-    success_criteria: "Basic repository boundaries are respected, no obvious credential leaks in logs, compliance files from different repositories are processed separately"
-    failure_criteria: "Hardcoded credentials in compliance files, mixing compliance rules between unrelated repositories, or logging full file paths that expose repository structure"
-    code_example: |
-      def test_cross_repository_isolation():
-          repo_a_compliance = get_compliance_for_repo("org_a/project")
-          repo_b_compliance = get_compliance_for_repo("org_b/project")
-          
-          assert repo_a_compliance != repo_b_compliance
-          assert not contains_credentials(repo_a_compliance)
-          assert not contains_credentials(repo_b_compliance)
-          
-          logs = get_recent_logs()
-          assert not contains_full_paths(logs)
-          assert not contains_api_keys(logs)
-
-  - title: "Production Scale Performance and Resource Management"
-    is_blocker: false
-    event: "Processing PRs in large enterprise environments with hundreds of compliance rules across multiple hierarchical configuration files while handling concurrent PR submissions"
-    success_criteria: "PR processing completes within 2 minutes for most cases, no obvious memory leaks during normal operation, service remains responsive under moderate load"
-    failure_criteria: "PR processing consistently times out, memory usage grows indefinitely, or service becomes unresponsive with more than 5 concurrent PRs"
-    code_example: |
-      def test_production_scale_performance():
-          env = setup_basic_env(repos=10, rules=50, concurrent_prs=5)
-          metrics = measure_pr_processing(env, duration_minutes=10)
-          
-          assert metrics.avg_latency < 120000  # 2 minutes
-          assert metrics.success_rate > 0.80  # 80% success
-          assert metrics.memory_growth_mb < 500  # Reasonable growth
-          
-          # Basic availability check
-          response = health_check_during_load(env)
-          assert response.status_code == 200
-          assert response.latency_ms < 5000
+  - title: "When relevant, utilize early return"
+    compliance_label: false
+    objective: "In a code snippet containing multiple logic conditions (such as 'if-else'), prefer an early return on edge cases than deep nesting"
+    success_criteria: "When relevant, utilize early return that reduces nesting"
+    failure_criteria: "Unjustified deep nesting that can be simplified by early return"
