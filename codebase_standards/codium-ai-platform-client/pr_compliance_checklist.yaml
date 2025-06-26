@@ -1,59 +1,18 @@
 pr_compliances:
-  - title: "Compliance 1: React Component Memory Leak Prevention"
-    is_blocker: true
-    event: "useEffect hooks with subscriptions, timers, or event listeners"
+  - title: "React Component Memory Leak Prevention"
+    compliance_label: true
+    objective: "When using useEffect hooks with subscriptions, timers, or event listeners, always implement proper cleanup functions to prevent memory leaks"
     success_criteria: "All useEffect hooks with side effects must have proper cleanup functions"
     failure_criteria: "Missing cleanup functions leading to memory leaks or stale closures"
-    code_example: |
-      // BAD: Memory leak - no cleanup
-      useEffect(() => {
-        const timer = setInterval(() => updateData(), 1000);
-        window.addEventListener('resize', handleResize);
-      }, []);
 
-      // GOOD: Proper cleanup
-      useEffect(() => {
-        const timer = setInterval(() => updateData(), 1000);
-        window.addEventListener('resize', handleResize);
-        return () => {
-          clearInterval(timer);
-          window.removeEventListener('resize', handleResize);
-        };
-      }, []);
-
-  - title: "Compliance 2: CSS-in-JS Performance Optimization"
-    is_blocker: false
-    event: "Dynamic style generation in React components"
+  - title: "CSS-in-JS Performance Optimization"
+    compliance_label: false
+    objective: "When generating dynamic styles in React components, ensure style calculations are memoized and avoid inline style objects in render methods"
     success_criteria: "Style calculations must be memoized and avoid inline style objects in render"
     failure_criteria: "Inline style objects causing unnecessary re-renders and performance degradation"
-    code_example: |
-      // BAD: Creates new object every render
-      <div style={{ margin: size * 2, color: isActive ? 'blue' : 'gray' }}>
 
-      // GOOD: Memoized styles
-      const divStyle = useMemo(() => ({
-        margin: size * 2,
-        color: isActive ? 'blue' : 'gray'
-      }), [size, isActive]);
-      
-      return <div style={divStyle}>Content</div>;
-
-  - title: "Compliance 3: Centralized Translation String Usage"
-    is_blocker: true
-    event: "Static strings in React components that should be translatable"
+  - title: "Centralized Translation String Usage"
+    compliance_label: true
+    objective: "When adding static strings in React components that are user-facing, always use centrally defined translation keys from translation JSON files"
     success_criteria: "All user-facing strings must use centrally defined translation keys from translation JSON files"
     failure_criteria: "Static strings hardcoded in components instead of using translation system"
-    code_example: |
-      // BAD: Hardcoded static strings
-      <button>Save Changes</button>
-      <p>Please enter a valid email address</p>
-      const errorMessage = "Something went wrong";
-
-      // GOOD: Using translation keys
-      <button>{t('common.saveChanges')}</button>
-      <p>{t('validation.invalidEmail')}</p>
-      const errorMessage = t('errors.genericError');
-
-      // GOOD: Using translation hook with proper key structure
-      const { t } = useTranslation();
-      const confirmMessage = t('dialogs.confirmDelete', { itemName });
