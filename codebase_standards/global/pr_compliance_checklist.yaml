@@ -10,3 +10,16 @@ pr_compliances:
     objective: "In a code snippet containing multiple logic conditions (such as 'if-else'), prefer an early return on edge cases than deep nesting"
     success_criteria: "When relevant, utilize early return that reduces nesting"
     failure_criteria: "Unjustified deep nesting that can be simplified by early return"
+
+  - title: "Robust Error Handling"
+    compliance_label: true
+    objective: "Ensure potential errors and edge cases are anticipated and handled gracefully throughout the code"
+    success_criteria: "All error scenarios are properly caught and handled with appropriate responses"
+    failure_criteria: "Unhandled exceptions, ignored errors, or missing edge case handling"
+
+  - title: "No Dead or Commented-Out Code"
+    compliance_label: true
+    objective: "Keep the codebase clean by ensuring all submitted code is active and necessary"
+    success_criteria: "All code in the PR is active and serves a purpose; no commented-out blocks"
+    failure_criteria: "Presence of unused, dead, or commented-out code sections"
+

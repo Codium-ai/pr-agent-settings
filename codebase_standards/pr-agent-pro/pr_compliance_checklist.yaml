@@ -1,12 +1,18 @@
-# pr_compliances:
-#   - title: "try-except for API calls"
-#     compliance_label: true
-#     objective: "When calling an API, always wrap it with try-except"
-#     success_criteria: "API calls wrapped with a try-except"
-#     failure_criteria: "API calls that are not wrapped with a try-except"
+ pr_compliances:
+   - title: "Avoids Obvious Performance Issues"
+     compliance_label: true
+     objective: "Prevent performance degradation by avoiding inefficient loops, N+1 queries, or excessive memory use"
+     success_criteria: "Code is optimized with efficient algorithms and database query patterns"
+     failure_criteria: "Inefficient loops, N+1 database queries, or excessive memory consumption"
 
-#   - title: "When relevant, utilize early return"
-#     compliance_label: false
-#     objective: "In a code snippet containing multiple logic conditions (such as 'if-else'), prefer an early return on edge cases than deep nesting"
-#     success_criteria: "When relevant, utilize early return that reduces nesting"
-#     failure_criteria: "Unjustified deep nesting that can be simplified by early return"
+   - title: "Follows Existing Patterns"
+     compliance_label: true
+     objective: "New code must be consistent with established architecture and design patterns in the codebase"
+     success_criteria: "Code follows existing patterns for separation of concerns, dependency injection, etc."
+     failure_criteria: "Code that breaks established patterns or introduces inconsistent architecture"
+
+   - title: "Manages State and Side Effects"
+     compliance_label: true
+     objective: "Ensure functions are predictable by avoiding global state modifications and minimizing side effects"
+     success_criteria: "Functions are pure where possible, state changes are localized and explicit"
+     failure_criteria: "Unexpected global state modifications or unpredictable side effects"
