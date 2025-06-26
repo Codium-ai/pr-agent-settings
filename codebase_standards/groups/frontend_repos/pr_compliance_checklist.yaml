@@ -1,28 +1,12 @@
-pr_compliances:
-  - title: "Compliance 3: Performance and Security Logging"
-    is_blocker: true
-    event: "Critical operations with performance or security implications"
-    success_criteria: "Non-blocking logging mechanism with minimal performance overhead and secure handling of sensitive information"
-    failure_criteria: "Logging that significantly impacts system performance or exposes sensitive data"
-    code_example: |
-      def verify_logging_performance(log_time, sensitive_data):
-          return log_time < 10 and not sensitive_data
-
-      def process_sensitive_transaction(transaction):
-          start_time = time.time()
-          try:
-              result = execute_transaction(transaction)
-              
-              log_entry = {
-                  "transaction_id": anonymize(transaction.id),
-                  "sensitive_data": False
-              }
-              
-              log_time = time.time() - start_time
-              if verify_logging_performance(log_time, log_entry['sensitive_data']):
-                  logger.info("Transaction processed", extra=log_entry)
-              
-              return result
-          except TransactionError as e:
-              logger.error("Transaction failed", extra={"error": str(e)})
-              raise
+#pr_compliances:
+#  - title: "try-except for API calls"
+#    compliance_label: true
+#    objective: "When calling an API, always wrap it with try-except"
+#    success_criteria: "API calls wrapped with a try-except"
+#    failure_criteria: "API calls that are not wrapped with a try-except"
+#
+#  - title: "When relevant, utilize early return"
+#    compliance_label: false
+#    objective: "In a code snippet containing multiple logic conditions (such as 'if-else'), prefer an early return on edge cases than deep nesting"
+#    success_criteria: "When relevant, utilize early return that reduces nesting"
+#    failure_criteria: "Unjustified deep nesting that can be simplified by early return"

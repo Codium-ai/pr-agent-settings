@@ -1,23 +1,12 @@
-pr_compliances:
-  - title: "Compliance 2: Granular Exception Handling"
-    is_blocker: false
-    event: "Multi-step operations with potential failure modes"
-    success_criteria: "Type-specific exception handling and differentiated error responses"
-    failure_criteria: "Catching all exceptions with a single, generic handler or losing specific error context"
-    code_example: |
-      def check_exception_compliance(exceptions):
-          return len(exceptions) > 1
-
-      def retrieve_user_data(user_id):
-          exceptions = []
-          try:
-              return database.get_user(user_id)
-          except ConnectionError as e:
-              exceptions.append(e)
-              logger.error("Connection failed")
-          except NotFoundError as e:
-              exceptions.append(e)
-              logger.warning("User not found")
-          
-          if not check_exception_compliance(exceptions):
-              logger.warning("Compliance check failed")
+#pr_compliances:
+#  - title: "try-except for API calls"
+#    compliance_label: true
+#    objective: "When calling an API, always wrap it with try-except"
+#    success_criteria: "API calls wrapped with a try-except"
+#    failure_criteria: "API calls that are not wrapped with a try-except"
+#
+#  - title: "When relevant, utilize early return"
+#    compliance_label: false
+#    objective: "In a code snippet containing multiple logic conditions (such as 'if-else'), prefer an early return on edge cases than deep nesting"
+#    success_criteria: "When relevant, utilize early return that reduces nesting"
+#    failure_criteria: "Unjustified deep nesting that can be simplified by early return"
