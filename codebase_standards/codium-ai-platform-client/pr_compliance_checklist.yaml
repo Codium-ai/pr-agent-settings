@@ -1,12 +1,18 @@
-#pr_compliances:
-#  - title: "try-except for API calls"
-#    compliance_label: true
-#    objective: "When calling an API, always wrap it with try-except"
-#    success_criteria: "API calls wrapped with a try-except"
-#    failure_criteria: "API calls that are not wrapped with a try-except"
-#
-#  - title: "When relevant, utilize early return"
-#    compliance_label: false
-#    objective: "In a code snippet containing multiple logic conditions (such as 'if-else'), prefer an early return on edge cases than deep nesting"
-#    success_criteria: "When relevant, utilize early return that reduces nesting"
-#    failure_criteria: "Unjustified deep nesting that can be simplified by early return"
+pr_compliances:
+  - title: "React Component Memory Leak Prevention"
+    compliance_label: true
+    objective: "When using useEffect hooks with subscriptions, timers, or event listeners, always implement proper cleanup functions to prevent memory leaks"
+    success_criteria: "All useEffect hooks with side effects must have proper cleanup functions"
+    failure_criteria: "Missing cleanup functions leading to memory leaks or stale closures"
+
+  - title: "CSS-in-JS Performance Optimization"
+    compliance_label: false
+    objective: "When generating dynamic styles in React components, ensure style calculations are memoized and avoid inline style objects in render methods"
+    success_criteria: "Style calculations must be memoized and avoid inline style objects in render"
+    failure_criteria: "Inline style objects causing unnecessary re-renders and performance degradation"
+
+  - title: "Centralized Translation String Usage"
+    compliance_label: true
+    objective: "When adding static strings in React components that are user-facing, always use centrally defined translation keys from translation JSON files"
+    success_criteria: "All user-facing strings must use centrally defined translation keys from translation JSON files"
+    failure_criteria: "Static strings hardcoded in components instead of using translation system"

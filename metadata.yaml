@@ -5,15 +5,13 @@ pr-agent-pro:
  best_practices_paths:
    - "pr-agent-pro"
 
-# Repos related to groups
-# frontend_repos
 codium-ai-platform-client:
  pr_compliance_checklist_paths:
-   - "groups/frontend_repos"
+   - "codium-ai-platform-client"
  best_practices_paths:
-   - "groups/frontend_repos"
+   - "codium-ai-platform-client"
 
-# backend_repos
+# group backend_repos
 qodo-engine:
  pr_compliance_checklist_paths:
    - "groups/backend_repos"
