@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Suggestions for Pull Request</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            line-height: 1.6;
+            color: #24292e;
+            background-color: #f6f8fa;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .pr-title {
+            font-size: 28px;
+            border-bottom: 2px solid #e1e4e8;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            color: #0366d6;
+        }
+        .pr-title a {
+            color: inherit;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .pr-title a:hover {
+            text-decoration: underline;
+        }
+        .model-container {
+            border: 1px solid #d1d5da;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            background-color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .model-header {
+            background-color: #f1f8ff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #d1d5da;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .model-title {
+            font-size: 22px;
+            color: #0366d6;
+            margin: 0;
+            font-weight: 600;
+        }
+        .model-body {
+            padding: 20px;
+        }
+        .suggestion-card {
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .suggestion-card:last-child {
+            margin-bottom: 0;
+        }
+        .suggestion-header {
+            background-color: #f6f8fa;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .suggestion-summary {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+        .label {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #fff;
+            text-transform: capitalize;
+            white-space: nowrap;
+        }
+        .label-critical-bug { background-color: #d73a49; }
+        .label-general { background-color: #448aff; }
+        .label-security { background-color: #f6a623; }
+        .suggestion-body {
+            padding: 15px;
+        }
+        .suggestion-body > p {
+            margin-top: 0;
+        }
+        .suggestion-content {
+            padding: 12px;
+            background-color: #fffbdd;
+            border-left: 4px solid #f9a825;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        .file-info {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            background-color: #f3f3f3;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .code-comparison {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .code-block {
+            flex: 1;
+            min-width: 300px;
+        }
+        .code-block h5 {
+            margin: 0 0 5px 0;
+            font-size: 14px;
+        }
+        pre {
+            background-color: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            border-radius: 4px;
+            padding: 12px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 13px;
+        }
+        .existing-code h5 { color: #d73a49; }
+        .improved-code h5 { color: #28a745; }
+        .existing-code pre { border-left: 4px solid #f8d7da; }
+        .improved-code pre { border-left: 4px solid #d4edda; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="pr-title">
+        <a href="https://github.com/schreibfaul1/ESP32-MiniWebRadio/pull/532" target="_blank" rel="noopener noreferrer">Pull Request #532 Suggestions</a>
+    </h1>
+
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 1</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Prevent out-of-bounds memory access.</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.h</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">The current implementation of `startsWith` can read beyond the bounds of the `base` string if `base` is a prefix of `str` but shorter (e.g., `base`="a", `str`="ab"). This can lead to undefined behavior. The loop should also check if the `base` string has ended.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>bool startsWith (const char* base, const char* str) {
+//fb
+    char c;
+    while ( (c = *str++) != '\0' )
+      if (c != *base++) return false;
+    return true;
+}</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>bool startsWith (const char* base, const char* str) {
+//fb
+    char c;
+    while ( (c = *str++) != '\0' ) {
+      if (c != *base++) return false;
+      if (*(base-1) == '\0') return false; // base is shorter than str
+    }
+    return true;
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Correct illogical success message handling.</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">src/index.h</span> | Language: <span class="file-info">javascript</span></p>
+                            <div class="suggestion-content">The `onreadystatechange` handler shows the same success message regardless of the server's response. The `else` block should display a failure message to correctly inform the user about the upload status.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>xhr.onreadystatechange = function () { // Call a function when the state changes.
+    if (xhr.readyState === 4) {
+      if (xhr.responseText === 'OK') alert(filename + ' successfully uploaded')
+        else alert(filename + ' successfully uploaded')
+    }
+}</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>xhr.onreadystatechange = function () { // Call a function when the state changes.
+    if (xhr.readyState === 4) {
+      if (xhr.responseText === 'OK') alert(filename + ' successfully uploaded')
+        else alert(filename + ' not successfully uploaded. Response: ' + xhr.responseText)
+    }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Ensure consistent application state update.</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">src/main.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">The code handles the `SD_Upload` command and updates `stations.json`, but the same logic is missing for the `uploadfile` command. When a file is uploaded via `uploadfile` and it is `stations.json`, `staMgnt.updateStationsList()` should also be called to ensure station data is reloaded consistently.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>if(strcmp(cmd, "uploadfile") == 0){savefile(param, contentLength); return;}</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>if(strcmp(cmd, "uploadfile") == 0){savefile(param, contentLength);
+                                     if(strcmp(param, "/stations.json") == 0) staMgnt.updateStationsList();
+                                     return;}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 2</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Use correct HTTP method</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">src/index.js.h</span> | Language: <span class="file-info">javascript</span></p>
+                            <div class="suggestion-content">The request uses 'POST' method but the server now expects 'DELETE' for file deletion operations. Update the code to use 'DELETE' method to match the server-side implementation which now calls WEBSRV_onDelete handler.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>var theUrl = "SD_delete?" + encodeURIComponent(node.data.path) + '&version=' + Math.random().toString()
+var xhr = new XMLHttpRequest()
+xhr.timeout = 2000; // time in milliseconds
+xhr.open('POST', theUrl, true)</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>var theUrl = "SD/?" + encodeURIComponent(node.data.path) + '&version=' + Math.random().toString()
+var xhr = new XMLHttpRequest()
+xhr.timeout = 2000; // time in milliseconds
+xhr.open('DELETE', theUrl, true)</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Fix error message formatting</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">src/index.h</span> | Language: <span class="file-info">javascript</span></p>
+                            <div class="suggestion-content">There's a missing space in the error message when a file fails to upload. This makes the error message display incorrectly. Add a space before "not successfully" for better readability.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>xhr.onreadystatechange = function () { // Call a function when the state changes.
+    if (xhr.readyState === 4) {
+      if (xhr.responseText === 'OK') alert(filename + ' successfully uploaded')
+        else alert(filename + 'not successfully uploaded')
+    }
+}</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>xhr.onreadystatechange = function () { // Call a function when the state changes.
+    if (xhr.readyState === 4) {
+      if (xhr.responseText === 'OK') alert(filename + ' successfully uploaded')
+        else alert(filename + ' not successfully uploaded')
+    }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 3</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Prevent header buffer from null terminator overwrite.</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">C++</span></p>
+                            <div class="suggestion-content">The current logic for handling long request header lines (specifically those 509 characters or longer) can lead to the `rhl` buffer not being correctly null-terminated. When `pos` reaches 510, `rhl[510]` is set to `\0`. However, if more characters for the same line arrive, the `rhl[pos] = b;` assignment (where `pos` is 510 due to initialization or reset by `pos = 510; continue;`) will overwrite this null terminator. This could cause subsequent string functions operating on `rhl` (e.g., `indexOf`, `startsWith`) to read out of bounds. The logic should ensure that once the buffer limit is reached and logged, subsequent characters on the same line are consumed but not written into the buffer, and `rhl` is always correctly null-terminated.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>rhl[pos] = b;
+pos++;
+if(pos == 511) {
+    pos = 510;
+    continue;
+}
+if(pos == 510) {
+    rhl[pos] = '\0';
+     log_i("requestHeaderline overflow");
+}</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>// This improved snippet assumes 'b' is the current character read from the client,
+// and 'pos' is the current write index in 'rhl'.
+// A boolean flag, e.g., 'current_line_truncated', should be initialized to false
+// at the beginning of reading each new header line.
+
+if (current_line_truncated) {
+    // If the line has already been marked as truncated,
+    // consume 'b' without storing it to prevent buffer overflow.
+} else if (pos < sizeof(rhl) - 1) {
+    // If there's space for the current character 'b' AND a null terminator.
+    rhl[pos++] = b;
+} else {
+    // Buffer is full. The current character 'b' cannot be stored.
+    // Ensure the buffer is null-terminated at the very end.
+    rhl[sizeof(rhl) - 1] = '\0';
+    log_i("requestHeaderline overflow, line truncated");
+    current_line_truncated = true; // Mark this line as truncated.
+}
+
+// Note: After the character-reading loop for the entire line finishes (e.g., on '\n'),
+// if 'current_line_truncated' is still false (i.e., no overflow occurred),
+// an explicit `rhl[pos] = '\0';` is required to null-terminate normally short lines.</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 4</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Ensure copied strings are null-terminated.</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">The `strncpy` function is used to extract the command, parameter, and argument from the request header. However, `strncpy` does not guarantee null-termination if the source string length is equal to or greater than the specified count, which can lead to buffer over-reads in subsequent string operations. To prevent this, explicitly null-terminate the destination buffer after the copy.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>// param between "?" and "&" or HTTP, if "?" exists
+if(pos_question != -1){
+    int start_part2 = pos_question + 1;
+    int end_part2 = (pos_ampersand != -1) ? pos_ampersand : pos_http;
+    strncpy(http_param, rhl + start_part2, end_part2 - start_part2);
+}</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>// param between "?" and "&" or HTTP, if "?" exists
+if(pos_question != -1){
+    int start_part2 = pos_question + 1;
+    int end_part2 = (pos_ampersand != -1) ? pos_ampersand : pos_http;
+    int len = end_part2 - start_part2;
+    if(len > sizeof(http_param) - 1) len = sizeof(http_param) - 1;
+    strncpy(http_param, rhl + start_part2, len);
+    http_param[len] = '\0';
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 5</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Harden in-place URL decoding input validation</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">Add explicit bounds checks and input validation to prevent unsafe memory access or buffer overflows when decoding, especially if malformed percent-encoded sequences appear at the end of the string.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>void WebSrv::url_decode_in_place(char* url) {
+    int length = strlen(url);
+    int write_pos = 0;  // Die Position, an die das dekodierte Zeichen geschrieben wird
+
+    auto from_hex = [](char ch) {
+       return std::isdigit(ch) ? ch - '0' : std::tolower(ch) - 'a' + 10;
+    };
+
+    for (int i = 0; i < length; ++i) {
+        if (url[i] == '%') {
+            if (i + 2 < length) {
+                // Dekodiere die beiden folgenden Hex-Zeichen
+                int hex_value = from_hex(url[i + 1]) * 16 + from_hex(url[i + 2]);
+                url[write_pos++] = static_cast&lt;char&gt;(hex_value);  // Schreibe dekodiertes Zeichen
+                i += 2;  // Überspringe die beiden Hex-Zeichen
+            }
+        } else if (url[i] == '+') {
+            // Ersetze '+' durch ein Leerzeichen
+            url[write_pos++] = ' ';
+        } else {
+            // Normales Zeichen einfach kopieren
+            url[write_pos++] = url[i];
+        }
+    }
+    url[write_pos] = '\0'; // Add a null termination character to mark the end of the string
+}</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>void WebSrv::url_decode_in_place(char* url) {
+    int length = strlen(url);
+    int write_pos = 0;
+    auto from_hex = [](char ch) {
+       ch = std::tolower(ch);
+       return std::isdigit(ch) ? ch - '0' : (ch >= 'a' && ch <= 'f' ? ch - 'a' + 10 : -1);
+    };
+    for (int i = 0; i < length; ++i) {
+        if (url[i] == '%' && i + 2 < length &&
+            from_hex(url[i + 1]) != -1 && from_hex(url[i + 2]) != -1) {
+            int hex_value = from_hex(url[i + 1]) * 16 + from_hex(url[i + 2]);
+            url[write_pos++] = static_cast&lt;char&gt;(hex_value);
+            i += 2;
+        } else if (url[i] == '+') {
+            url[write_pos++] = ' ';
+        } else {
+            url[write_pos++] = url[i];
+        }
+    }
+    url[write_pos] = '\0';
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Validate index ranges before memory copy</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">The value of `start_part1`, `start_part2`, and related indices should be validated to ensure they do not become negative or cause `strncpy` to access invalid memory, especially when delimiters are missing; add appropriate range checks before calling `strncpy`.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>else if(startsWith(rhl, "DELETE /")){
+    method_DELETE = true;
+    int pos_http = indexOf(rhl, "HTTP/", 0);
+    int pos_question    = indexOf(rhl, "?", 0);  // questionmark
+    int pos_ampersand   = indexOf(rhl, "&", 0);  // ampersand
+    if(pos_http == -1) {log_w("GET without HTTP?"); goto exit;}
+
+    // cmd between "GET /" and "?" or "HTTP"
+    int start_part1 = 8; // after "GET /"
+    int end_part1 = (pos_question != -1) ? pos_question : pos_http;
+    strncpy(http_cmd, rhl + start_part1, end_part1 - start_part1);
+
+    // param between "?" and "&" or HTTP, if "?" exists
+    if(pos_question != -1){
+        int start_part2 = pos_question + 1;
+        int end_part2 = (pos_ampersand != -1) ? pos_ampersand : pos_http;
+        strncpy(http_param, rhl + start_part2, end_part2 - start_part2);
+    }
+
+    // arg between "&" and "HTTP" if "&" exists
+    if (pos_ampersand != -1) {
+        int start_part3 = pos_ampersand + 1;
+        strncpy(http_arg, rhl + start_part3, pos_http - start_part3);
+    }
+}</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>else if(startsWith(rhl, "DELETE /")){
+    method_DELETE = true;
+    int pos_http = indexOf(rhl, "HTTP/", 0);
+    int pos_question    = indexOf(rhl, "?", 0);  // questionmark
+    int pos_ampersand   = indexOf(rhl, "&", 0);  // ampersand
+    if(pos_http == -1) {log_w("DELETE without HTTP?"); goto exit;}
+
+    // cmd between "DELETE /" and "?" or "HTTP"
+    int start_part1 = 8; // after "DELETE /"
+    int end_part1 = pos_http;
+    if (pos_question != -1 && pos_question > start_part1) end_part1 = pos_question;
+    if (end_part1 > start_part1 && end_part1 - start_part1 < (int)sizeof(http_cmd))
+        strncpy(http_cmd, rhl + start_part1, end_part1 - start_part1);
+
+    // param between "?" and "&" or HTTP, if "?" exists
+    if(pos_question != -1) {
+        int start_part2 = pos_question + 1;
+        int end_part2 = (pos_ampersand != -1 && pos_ampersand > start_part2) ? pos_ampersand : pos_http;
+        if (end_part2 > start_part2 && end_part2 - start_part2 < (int)sizeof(http_param))
+            strncpy(http_param, rhl + start_part2, end_part2 - start_part2);
+    }
+
+    // arg between "&" and "HTTP" if "&" exists
+    if (pos_ampersand != -1) {
+        int start_part3 = pos_ampersand + 1;
+        if (pos_http > start_part3 && pos_http - start_part3 < (int)sizeof(http_arg))
+            strncpy(http_arg, rhl + start_part3, pos_http - start_part3);
+    }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 6</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Fix undefined lowercase call</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">`toLowerCase` is undefined for raw characters and will not compile.  
+ Replace it with the standard `tolower`, casting to `unsigned char` to avoid UB with negative values.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>posColon = indexOf(rhl, ":", 0); // lowercase all letters up to the colon
+if(posColon >= 0) {
+    for(int i = 0; i < posColon; i++) { rhl[i] = toLowerCase(rhl[i]); }
+}</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>posColon = indexOf(rhl, ":", 0); // lowercase all letters up to the colon
+if(posColon >= 0) {
+    for(int i = 0; i < posColon; i++) {
+        rhl[i] = tolower(static_cast&lt;unsigned char&gt;(rhl[i]));
+    }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Ensure header line termination</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">If a header line ends with `\n` but *without* a preceding `\r`, `rhl` is left unterminated, causing later string routines to over-run.  
+ Explicitly append a null byte after finishing the line to guarantee proper termination.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>while(cmdclient.available()) {
+    uint8_t b = cmdclient.read();
+    if(b == '\n') {
+        if(!pos) { // empty line received, is the last line of this responseHeader
+            goto lastToDo;
+        }
+        break;
+    }
+    ...
+} // inner while</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>while(cmdclient.available()) {
+    uint8_t b = cmdclient.read();
+    if(b == '\n') {
+        if(!pos) { // empty line received, is the last line of this responseHeader
+            goto lastToDo;
+        }
+        break;
+    }
+    ...
+} // inner while
+rhl[pos] = '\0';       // ensure line is null-terminated</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 7</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Remove dependency on std functions</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">The lambda function uses `std::isdigit` and `std::tolower` without proper header includes, which may cause compilation errors. Replace the lambda with a simpler inline implementation that doesn't rely on std functions.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>void WebSrv::url_decode_in_place(char* url) {
+    int length = strlen(url);
+    int write_pos = 0;
+
+    auto from_hex = [](char ch) {
+       return std::isdigit(ch) ? ch - '0' : std::tolower(ch) - 'a' + 10;
+    };
+    ...
+}</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>void WebSrv::url_decode_in_place(char* url) {
+    int length = strlen(url);
+    int write_pos = 0;
+
+    for (int i = 0; i < length; ++i) {
+        if (url[i] == '%') {
+            if (i + 2 < length) {
+                char c1 = url[i + 1];
+                char c2 = url[i + 2];
+                int hex1 = (c1 >= '0' && c1 <= '9') ? c1 - '0' : (c1 >= 'a' && c1 <= 'f') ? c1 - 'a' + 10 : (c1 >= 'A' && c1 <= 'F') ? c1 - 'A' + 10 : 0;
+                int hex2 = (c2 >= '0' && c2 <= '9') ? c2 - '0' : (c2 >= 'a' && c2 <= 'f') ? c2 - 'a' + 10 : (c2 >= 'A' && c2 <= 'F') ? c2 - 'A' + 10 : 0;
+                url[write_pos++] = static_cast&lt;char&gt;(hex1 * 16 + hex2);
+                i += 2;
+            }
+        } else if (url[i] == '+') {
+            url[write_pos++] = ' ';
+        } else {
+            url[write_pos++] = url[i];
+        }
+    }
+    url[write_pos] = '\0';
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Fix timeout logic race condition</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">The static timeout logic has a race condition where `f_time` is reset to false immediately after the availability check, potentially causing premature timeout resets. Move the reset inside the timeout condition only.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>static uint32_t stime;
+static bool      f_time = false;
+if(cmdclient.available() == 0) {
+    if(!f_time) {
+        stime = millis();
+        f_time = true;
+    }
+    if((millis() - stime) > timeout) {
+        log_e("timeout");
+        f_time = false;
+        return false;
+    }
+}
+f_time = false;</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>static uint32_t stime;
+static bool      f_time = false;
+if(cmdclient.available() == 0) {
+    if(!f_time) {
+        stime = millis();
+        f_time = true;
+    }
+    if((millis() - stime) > timeout) {
+        log_e("timeout");
+        f_time = false;
+        return false;
+    }
+} else {
+    f_time = false;
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Optimize string length calculation</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.h</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">The function calculates `strlen(start)` twice unnecessarily, which is inefficient. Store the length in a variable and reuse it to improve performance.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>void trim(char *str) {
+    char *start = str;
+    char *end;
+    while (isspace((unsigned char)*start)) start++;
+
+    if (*start == 0) {
+        str[0] = '\0';
+        return;
+    }
+
+    end = start + strlen(start) - 1;
+
+    while (end > start && isspace((unsigned char)*end)) end--;
+    end[1] = '\0';
+
+    memmove(str, start, strlen(start) + 1);
+}</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>void trim(char *str) {
+    char *start = str;
+    char *end;
+    while (isspace((unsigned char)*start)) start++;
+
+    if (*start == 0) {
+        str[0] = '\0';
+        return;
+    }
+
+    size_t len = strlen(start);
+    end = start + len - 1;
+
+    while (end > start && isspace((unsigned char)*end)) end--;
+    end[1] = '\0';
+
+    memmove(str, start, len - (end - start - len + 1) + 1);
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 8</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Add null terminators after strncpy</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">Ensure each strncpy call is followed by an explicit null terminator to avoid non-terminated strings. Compute the copied length, then set the next byte to '\0' on each buffer. This prevents buffer over-reads when using http_cmd, http_param, or http_arg.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>strncpy(http_cmd, rhl + start_part1, end_part1 - start_part1);
+
+// param between "?" and "&" or HTTP, if "?" exists
+if(pos_question != -1){
+    int start_part2 = pos_question + 1;
+    int end_part2 = (pos_ampersand != -1) ? pos_ampersand : pos_http;
+    strncpy(http_param, rhl + start_part2, end_part2 - start_part2);
+}
+
+// arg between "&" and "HTTP" if "&" exists
+if (pos_ampersand != -1) {
+    int start_part3 = pos_ampersand + 1;
+    strncpy(http_arg, rhl + start_part3, pos_http - start_part3);
+}</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>int len_cmd = end_part1 - start_part1;
+strncpy(http_cmd, rhl + start_part1, len_cmd);
+http_cmd[len_cmd] = '\0';
+
+// param between "?" and "&" or HTTP, if "?" exists
+if(pos_question != -1){
+    int start_part2 = pos_question + 1;
+    int end_part2 = (pos_ampersand != -1) ? pos_ampersand : pos_http;
+    int len_param = end_part2 - start_part2;
+    strncpy(http_param, rhl + start_part2, len_param);
+    http_param[len_param] = '\0';
+}
+
+// arg between "&" and "HTTP" if "&" exists
+if (pos_ampersand != -1) {
+    int start_part3 = pos_ampersand + 1;
+    int len_arg = pos_http - start_part3;
+    strncpy(http_arg, rhl + start_part3, len_arg);
+    http_arg[len_arg] = '\0';
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Use std::tolower instead of toLowerCase</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">Replace the undefined `toLowerCase` call with the standard `tolower` function and cast to `unsigned char` to correctly lowercase header characters. This avoids compilation errors and ensures proper case normalization.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>if(posColon >= 0) {
+    for(int i = 0; i < posColon; i++) { rhl[i] = toLowerCase(rhl[i]); }
+}</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>#include &lt;cctype&gt;
+if(posColon >= 0) {
+    for(int i = 0; i < posColon; i++) {
+        rhl[i] = static_cast&lt;char&gt;(std::tolower(static_cast&lt;unsigned char&gt;(rhl[i])));
+    }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Fix missing space in alert message</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">src/index.h</span> | Language: <span class="file-info">javascript</span></p>
+                            <div class="suggestion-content">Add a leading space before "not" in the failure alert to separate words for readability. Ensure consistent user feedback messaging.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>xhr.onreadystatechange = function () { // Call a function when the state changes.
+    if (xhr.readyState === 4) {
+      if (xhr.responseText === 'OK') alert(filename + ' successfully uploaded')
+      else alert(filename + 'not successfully uploaded')
+    }
+}</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>xhr.onreadystatechange = function () { // Call a function when the state changes.
+    if (xhr.readyState === 4) {
+      if (xhr.responseText === 'OK') alert(filename + ' successfully uploaded')
+      else alert(filename + ' not successfully uploaded')
+    }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 9</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Fix buffer overflow vulnerability</h3>
+                            <span class="label label-security">security</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">The array bounds checking logic is incorrect and allows buffer overflow. When `pos` reaches 511, it should break to prevent writing beyond array bounds rather than continuing the loop.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>while(true) { // outer while
+    uint16_t pos = 0;
+    if((millis() - ctime) > timeout) {
+        log_e("timeout");
+        goto exit;
+    }
+    while(cmdclient.available()) {
+        uint8_t b = cmdclient.read();
+        if(b == '\n') {
+            if(!pos) { // empty line received, is the last line of this responseHeader
+                goto lastToDo;
+            }
+            break;
+        }
+        if(b == '\r') rhl[pos] = 0;
+        if(b < 0x20) continue;
+        rhl[pos] = b;
+        pos++;
+        if(pos == 511) {
+            pos = 510;
+            continue;
+        }
+        if(pos == 510) {
+            rhl[pos] = '\0';
+             log_i("requestHeaderline overflow");
+        }
+    } // inner while</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>while(true) { // outer while
+    uint16_t pos = 0;
+    if((millis() - ctime) > timeout) {
+        log_e("timeout");
+        goto exit;
+    }
+    while(cmdclient.available()) {
+        uint8_t b = cmdclient.read();
+        if(b == '\n') {
+            if(!pos) { // empty line received, is the last line of this responseHeader
+                goto lastToDo;
+            }
+            break;
+        }
+        if(b == '\r') rhl[pos] = 0;
+        if(b < 0x20) continue;
+        if(pos >= 511) {
+            rhl[511] = '\0';
+            log_i("requestHeaderline overflow");
+            break;
+        }
+        rhl[pos] = b;
+        pos++;
+    } // inner while</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Optimize timeout for reliability</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">src/index.h</span> | Language: <span class="file-info">javascript</span></p>
+                            <div class="suggestion-content">The timeout value has been doubled from 2000ms to 4000ms for image uploads. This could lead to poor user experience if network issues cause the upload to hang for extended periods.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>xhr.timeout = 4000; // time in milliseconds</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>xhr.timeout = 10000; // time in milliseconds</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Fix missing space in error message</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">src/index.h</span> | Language: <span class="file-info">javascript</span></p>
+                            <div class="suggestion-content">The error message is missing a space before "not successfully uploaded", making it hard to read. This affects user experience when upload fails.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>if (xhr.responseText === 'OK') alert(filename + ' successfully uploaded')
+              else alert(filename + 'not successfully uploaded')</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>if (xhr.responseText === 'OK') alert(filename + ' successfully uploaded')
+              else alert(filename + ' not successfully uploaded')</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 10</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Fix boundary check logic</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">The condition `idx > 0` misses the case when newline is at index 0. This could lead to incorrect length calculation. Change to `idx >= 0` to handle all newline positions correctly.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>int idx = str.indexOf("\n");
+if(idx > 0){
+    if(str.startsWith("-----")){      // is WebKitFormBoundary header
+        len -= str.length() + idx + 2;  // ------WebKitFormBoundaryEnlfueBZaFBBzAm7
+    }
+    else{
+        len -= str.length();
+    }
+}</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>int idx = str.indexOf("\n");
+if(idx >= 0){
+    if(str.startsWith("-----")){      // is WebKitFormBoundary header
+        len -= str.length() + idx + 2;  // ------WebKitFormBoundaryEnlfueBZaFBBzAm7
+    }
+    else{
+        len -= str.length();
+    }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Ensure string null-termination</h3>
+                            <span class="label label-security">security</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">The `strncpy` calls don't ensure null-termination, which could lead to buffer overflow when these strings are used later. Add explicit null-termination after each `strncpy` call.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>char http_cmd[512] = {0};
+char http_param[512] = {0};
+char http_arg[512] = {0};
+...
+strncpy(http_cmd, rhl + start_part1, end_part1 - start_part1);
+...
+strncpy(http_param, rhl + start_part2, end_part2 - start_part2);
+...
+strncpy(http_arg, rhl + start_part3, pos_http - start_part3);</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>char http_cmd[512] = {0};
+char http_param[512] = {0};
+char http_arg[512] = {0};
+...
+strncpy(http_cmd, rhl + start_part1, end_part1 - start_part1);
+http_cmd[end_part1 - start_part1] = '\0';
+...
+strncpy(http_param, rhl + start_part2, end_part2 - start_part2);
+http_param[end_part2 - start_part2] = '\0';
+...
+strncpy(http_arg, rhl + start_part3, pos_http - start_part3);
+http_arg[pos_http - start_part3] = '\0';</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Fix comment inconsistency</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">The comment says "after GET /" but the code uses offset 6, which is for "POST /". This incorrect offset will cause the command extraction to include an extra character. Change to 5 for "POST ".</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>// cmd between "GET /" and "?" or "HTTP"
+int start_part1 = 6; // after "GET /"
+int end_part1 = (pos_question != -1) ? pos_question : pos_http;
+strncpy(http_cmd, rhl + start_part1, end_part1 - start_part1);</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>// cmd between "POST /" and "?" or "HTTP"
+int start_part1 = 6; // after "POST /"
+int end_part1 = (pos_question != -1) ? pos_question : pos_http;
+strncpy(http_cmd, rhl + start_part1, end_part1 - start_part1);</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 11</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Prevent buffer overflows in request parsing.</h3>
+                            <span class="label label-security">security</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">The use of fixed-size char arrays (`rhl`, `http_cmd`, `http_param`, `http_arg`) combined with manual parsing logic is vulnerable to buffer overflows if incoming request data exceeds the defined buffer sizes. An attacker could send crafted requests to write beyond the buffer boundaries, potentially leading to crashes or security vulnerabilities. Consider using dynamic allocation or `std::string` for buffers that handle arbitrary user input, or strictly enforce size limits and reject overly long inputs.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>char rhl[512] = {0}; // requestHeaderline
+char http_cmd[512] = {0};
+char http_param[512] = {0};
+char http_arg[512] = {0};
+char contentType[50] = {0};
+...
+while(true) { // outer while
+...
+    while(cmdclient.available()) {
+        uint8_t b = cmdclient.read();
+        if(b == '\n') {
+...
+        if(pos == 511) {
+            pos = 510;
+            continue;
+        }
+        if(pos == 510) {
+            rhl[pos] = '\0';
+             log_i("requestHeaderline overflow");
+        }
+    } // inner while
+...
+    else if(startsWith(rhl, "GET /")){
+...
+        strncpy(http_cmd, rhl + start_part1, end_part1 - start_part1);
+...
+        strncpy(http_param, rhl + start_part2, end_part2 - start_part2);
+...
+        strncpy(http_arg, rhl + start_part3, pos_http - start_part3);
+...</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>// Example illustration (actual implementation may vary depending on desired approach)
+// Use std::string for dynamic resizing
+// std::string rhl;
+// while (cmdclient.available()) { char b = cmdclient.read(); if (b == '\n') break; if (b != '\r') rhl += b; }
+// ... parse rhl using string methods ...
+//
+// Or, with fixed buffers, add strict size checks before copying:
+char rhl[512] = {0};
+char http_cmd[512] = {0};
+char http_param[512] = {0};
+char http_arg[512] = {0};
+char contentType[50] = {0};
+...
+// Add check before rhl write loop: while(cmdclient.available() && pos < sizeof(rhl) - 1) { ... }
+...
+    else if(startsWith(rhl, "GET /")){
+...
+        int len_cmd = end_part1 - start_part1;
+        if (len_cmd > 0 && len_cmd < sizeof(http_cmd)) { // Add bounds check
+            strncpy(http_cmd, rhl + start_part1, len_cmd);
+            http_cmd[len_cmd] = '\0'; // Ensure null termination
+        } else { http_cmd[0] = '\0'; /* Handle error or empty */ }
+...
+        int len_param = end_part2 - start_part2;
+         if(pos_question != -1 && len_param > 0 && len_param < sizeof(http_param)){ // Add bounds check
+            strncpy(http_param, rhl + start_part2, len_param);
+            http_param[len_param] = '\0'; // Ensure null termination
+         } else { http_param[0] = '\0'; }
+...
+        int len_arg = pos_http - start_part3;
+        if (pos_ampersand != -1 && len_arg > 0 && len_arg < sizeof(http_arg)) { // Add bounds check
+            strncpy(http_arg, rhl + start_part3, len_arg);
+             http_arg[len_arg] = '\0'; // Ensure null termination
+        } else { http_arg[0] = '\0'; }
+...</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Ensure null-termination after copying.</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">When using `strncpy` with a calculated length, the resulting string is not null-terminated if the calculated length is exactly equal to the size of the destination buffer. This can lead to errors when using the extracted strings with functions that expect null-termination (e.g., `strlen`, `strcpy`, `strcmp`, or printing functions). Ensure that every string extracted using `strncpy` or similar manual methods is explicitly null-terminated at the correct position.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>else if(startsWith(rhl, "GET /")){
+    method_GET = true;
+    int pos_http = indexOf(rhl, "HTTP/", 0);
+    int pos_question    = indexOf(rhl, "?", 0);  // questionmark
+    int pos_ampersand   = indexOf(rhl, "&", 0);  // ampersand
+    if(pos_http == -1) {log_w("GET without HTTP?"); goto exit;}
+
+    // cmd between "GET /" and "?" or "HTTP"
+    int start_part1 = 5; // after "GET /"
+    int end_part1 = (pos_question != -1) ? pos_question : (pos_ampersand != -1) ? pos_ampersand : pos_http;
+    strncpy(http_cmd, rhl + start_part1, end_part1 - start_part1);
+
+    // param between "?" and "&" or HTTP, if "?" exists
+    if(pos_question != -1){
+...</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>else if(startsWith(rhl, "GET /")){
+    method_GET = true;
+    int pos_http = indexOf(rhl, "HTTP/", 0);
+    int pos_question    = indexOf(rhl, "?", 0);  // questionmark
+    int pos_ampersand   = indexOf(rhl, "&", 0);  // ampersand
+    if(pos_http == -1) {log_w("GET without HTTP?"); goto exit;}
+
+    // cmd between "GET /" and "?" or "HTTP"
+    int start_part1 = 5; // after "GET /"
+    int end_part1 = (pos_question != -1) ? pos_question : (pos_ampersand != -1) ? pos_ampersand : pos_http;
+    int len_cmd = end_part1 - start_part1;
+    strncpy(http_cmd, rhl + start_part1, len_cmd);
+    http_cmd[len_cmd] = '\0'; // Explicit null termination
+
+    // param between "?" and "&" or HTTP, if "?" exists
+    if(pos_question != -1){
+        int start_part2 = pos_question + 1;
+        int end_part2 = (pos_ampersand != -1) ? pos_ampersand : pos_http;
+        int len_param = end_part2 - start_part2;
+        strncpy(http_param, rhl + start_part2, len_param);
+        http_param[len_param] = '\0'; // Explicit null termination
+    } else { http_param[0] = '\0'; } // Ensure empty string if no param
+
+    // arg between "&" and "HTTP" if "&" exists
+    if (pos_ampersand != -1) {
+        int start_part3 = pos_ampersand + 1;
+        int len_arg = pos_http - start_part3;
+        strncpy(http_arg, rhl + start_part3, len_arg);
+        http_arg[len_arg] = '\0'; // Explicit null termination
+    } else { http_arg[0] = '\0'; } // Ensure empty string if no arg
+}
+// Apply similar null termination after strncpy in POST and DELETE blocks
+...</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Fix base64 upload length calculation.</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">lib/websrv/websrv.cpp</span> | Language: <span class="file-info">cpp</span></p>
+                            <div class="suggestion-content">The logic for adjusting the content length in `uploadB64image` by reading a partial line and attempting to detect specific header formats like `WebKitFormBoundary` is complex and error-prone. This approach might miscalculate the actual remaining length of the base64 data, potentially leading to incomplete or corrupted file uploads. A more reliable method would be to read and discard all request headers until the blank line indicating the start of the body, then read exactly `contentLength` bytes from the body.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>str = str + cmdclient.readStringUntil(','); // data:image/jpeg;base64,
+int idx = str.indexOf("\n");
+if(idx > 0){
+    if(str.startsWith("-----")){      // is WebKitFormBoundary header
+        len -= str.length() + idx + 2;  // ------WebKitFormBoundaryEnlfueBZaFBBzAm7
+    }
+    else{
+        len -= str.length();
+    }
+}
+while(cmdclient.available()){
+    av=cmdclient.available();
+...</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>// Example illustration (requires adapting to actual body format)
+// int bytes_read_for_headers = 0;
+// String header_line;
+// while (cmdclient.connected() && cmdclient.available()) {
+//     header_line = cmdclient.readStringUntil('\n');
+//     bytes_read_for_headers += header_line.length() + 1; // +1 for '\n'
+//     if (header_line.length() <= 1) break; // Blank line indicates end of headers
+// }
+// uint32_t base64_data_length = contentLength - bytes_read_for_headers; // Assuming contentLength is total body size
+// ... now read base64_data_length bytes ...
+str = str + cmdclient.readStringUntil(','); // Reads up to the comma
+// The calculation below is problematic for robustness
+int idx = str.indexOf("\n");
+if(idx > 0){
+    if(str.startsWith("-----")){
+        // This calculation is risky.
+        // len -= str.length() + idx + 2;
+    }
+    else{
+        // This calculation is also risky.
+        // len -= str.length();
+    }
+}
+// Instead of adjusting len based on partial reads, read until body starts.
+// while (cmdclient.connected() && cmdclient.available() && cmdclient.read() != '\n'); // Simplified: read until first \n after ','
+// Now the base64 data should start, use contentLength (or a derived value)
+while(cmdclient.available()){
+    av=cmdclient.available();
+...</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+</div>
+
+</body>
+</html>

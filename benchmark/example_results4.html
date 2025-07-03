@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Suggestions for Pull Request</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            line-height: 1.6;
+            color: #24292e;
+            background-color: #f6f8fa;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .pr-title {
+            font-size: 28px;
+            border-bottom: 2px solid #e1e4e8;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            color: #0366d6;
+        }
+        .pr-title a {
+            color: inherit;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .pr-title a:hover {
+            text-decoration: underline;
+        }
+        .model-container {
+            border: 1px solid #d1d5da;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            background-color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .model-header {
+            background-color: #f1f8ff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #d1d5da;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .model-title {
+            font-size: 22px;
+            color: #0366d6;
+            margin: 0;
+            font-weight: 600;
+        }
+        .model-body {
+            padding: 20px;
+        }
+        .suggestion-card {
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .suggestion-card:last-child {
+            margin-bottom: 0;
+        }
+        .suggestion-header {
+            background-color: #f6f8fa;
+            padding: 10px 15px;
+            border-bottom: 1px solid #e1e4e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .suggestion-summary {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+        .label {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #fff;
+            text-transform: capitalize;
+        }
+        .label-critical-bug { background-color: #d73a49; }
+        .label-general { background-color: #448aff; }
+        .label-security { background-color: #f6a623; }
+        .suggestion-body {
+            padding: 15px;
+        }
+        .suggestion-body > p {
+            margin-top: 0;
+        }
+        .suggestion-content {
+            padding: 12px;
+            background-color: #fffbdd;
+            border-left: 4px solid #f9a825;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        .file-info {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            background-color: #f3f3f3;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .code-comparison {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .code-block {
+            flex: 1;
+            min-width: 300px;
+        }
+        .code-block h5 {
+            margin: 0 0 5px 0;
+            font-size: 14px;
+        }
+        pre {
+            background-color: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            border-radius: 4px;
+            padding: 12px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 13px;
+        }
+        .existing-code h5 { color: #d73a49; }
+        .improved-code h5 { color: #28a745; }
+        .existing-code pre { border-left: 4px solid #f8d7da; }
+        .improved-code pre { border-left: 4px solid #d4edda; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="pr-title">
+        <a href="https://github.com/winblues/blue95/pull/54" target="_blank" rel="noopener noreferrer">Pull Request #54 Suggestions</a>
+    </h1>
+
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 1</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Ensure target directory exists.</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">The current implementation does not create the target directory for wallpapers. If the directory does not exist, the `wget` command will fail for all downloads. You should ensure the target directory is created before attempting to download files into it.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+mkdir -p "$TARGET_DIR"
+
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Improve wget command robustness.</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">The `wget` command in the `xargs` pipe does not have any flags to prevent it from failing loudly on errors, retrying, or running quietly. This can lead to a noisy and potentially fragile script. It is better to use `wget` with flags to suppress output, continue downloads, and prevent retries for a cleaner and more robust execution.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -q -c -nc -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 2</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Ensure target directory exists</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">The script doesn't check if the target directory exists before downloading files. If the directory doesn't exist, the downloads will fail. Add a mkdir command with the -p flag to ensure the target directory exists.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>#!/usr/bin/env bash
+
+set -oeux pipefail
+
+URLS=(
+  # ... URL list ...
+)
+
+TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>#!/usr/bin/env bash
+
+set -oeux pipefail
+
+URLS=(
+  # ... URL list ...
+)
+
+TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+mkdir -p "$TARGET_DIR"
+
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 3</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Correctly enable pipefail shell option.</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">The `set` command is not enabling the `pipefail` option correctly. The current syntax `set -oeux pipefail` treats `pipefail` as a positional argument ($1) instead of setting the shell option. This means that in a pipeline like `cmd1 | cmd2`, if `cmd1` fails but `cmd2` succeeds, the pipeline will still be considered successful, potentially masking errors. Use `set -euxo pipefail` to correctly enable `errexit` (-e), `nounset` (-u), `xtrace` (-x), and `pipefail` (-o pipefail) options.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>set -oeux pipefail</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>set -euxo pipefail</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Make wallpaper downloads idempotent.</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">The `wget` command currently re-downloads files if they already exist, potentially creating numbered duplicates (e.g., `image.bmp.1`). Add the `-nc` (`--no-clobber`) option to `wget` to prevent downloading files if they already exist in the target directory. This makes the script idempotent and avoids unnecessary downloads or disk space consumption on subsequent runs.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -nc -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Ensure target directory exists first.</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">Before attempting to download files, explicitly create the target directory using `mkdir -p`. This ensures the directory exists. Additionally, checking for write permissions to `TARGET_DIR` can provide a clearer error message if the script lacks necessary permissions, rather than letting individual `wget` processes fail.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+
+mkdir -p "$TARGET_DIR" || { echo "Error: Failed to create directory '$TARGET_DIR'. Aborting." >&2; exit 1; }
+if [ ! -w "$TARGET_DIR" ]; then
+  echo "Error: Directory '$TARGET_DIR' is not writable. Aborting." >&2
+  exit 1
+fi
+
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 4</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Add checksum validation for downloads.</h3>
+                            <span class="label label-security">security</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">The script downloads files from an external source without verifying their integrity using checksums. This is a security risk, as a malicious or corrupted file could be downloaded and placed into the system's wallpaper directory. To mitigate this, each file should be verified against a known SHA256 hash after download.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>URLS=(
+  "https://archive.org/download/microsoft-windows-wallpapers-pictures/1-2.%20Windows%203.1x%20and%20NT%203.x/256color%20%28large%29.bmp"
+  "https://archive.org/download/microsoft-windows-wallpapers-pictures/1-2.%20Windows%203.1x%20and%20NT%203.x/Concrete.bmp"
+  ...
+  "https://archive.org/download/microsoft-windows-wallpapers-pictures/1-1.%20Windows%203.0/WEAVE.BMP"
+)
+
+TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>BASE_URL="https://archive.org/download/microsoft-windows-wallpapers-pictures"
+
+# Format: "SHA256_HASH  SUB_PATH/FILENAME"
+# Note: Checksums are placeholders and MUST be replaced with actual file hashes.
+WALLPAPERS=(
+  "placeholder_sha256_hash  1-2.%20Windows%203.1x%20and%20NT%203.x/256color%20%28large%29.bmp"
+  "placeholder_sha256_hash  1-2.%20Windows%203.1x%20and%20NT%203.x/Concrete.bmp"
+  ...
+  "placeholder_sha256_hash  1-1.%20Windows%203.0/WEAVE.BMP"
+)
+
+TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+
+for item in "${WALLPAPERS[@]}"; do
+  read -r sha256_hash path <<< "$item"
+  filename=$(basename "$path")
+  # URL decode filename for checksum verification, wget does this automatically
+  decoded_filename=$(printf '%b' "${filename//%/\\x}")
+  wget -q -P "$TARGET_DIR" "${BASE_URL}/${path}"
+  echo "${sha256_hash}  ${TARGET_DIR}/${decoded_filename}" | sha256sum -c -
+done</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 5</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Ensure target directory exists before download.</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">If `$TARGET_DIR` does not exist, `wget` will fail to save the files. Add a directory creation step before downloading to prevent errors when the directory does not already exist.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>mkdir -p "$TARGET_DIR"
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 6</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Fix invalid set options</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">Using `-o` together with concatenated short flags is invalid and causes the script to abort immediately. Replace it with the conventional `set -euo pipefail` to correctly enable *errexit*, *nounset*, and *pipefail* while avoiding a startup failure.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>set -oeux pipefail</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>set -euo pipefail</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Create download directory first</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">Ensure the target directory exists before downloading; without it, every `wget` call fails with “No such file or directory.” Create the directory with `mkdir -p` right after defining `TARGET_DIR`.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+mkdir -p "$TARGET_DIR"
+
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 7</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Create target directory before downloading</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">The script will fail if the target directory doesn't exist. Create the directory before attempting downloads to ensure the script runs successfully.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+
+mkdir -p "$TARGET_DIR"
+
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Add download failure error handling</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">Add error handling to detect and report download failures. Without proper error handling, partial download failures may go unnoticed.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>if ! printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"; then
+    echo "Error: Some wallpaper downloads failed" >&2
+    exit 1
+fi</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 8</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Correct shell option flags</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">The `set` flags are malformed and may not enable the intended options. Use the correct combination to fail on errors, undefined variables, and pipe failures while preserving debugging.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>set -oeux pipefail</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>set -euo pipefail -x</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Create target directory</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">Ensure the target directory exists before downloading to avoid errors when `wget` writes files. Create the directory with `mkdir -p`.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+mkdir -p "$TARGET_DIR"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Skip existing downloads</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">Add the `-nc` flag to `wget` to skip downloading files that already exist, preventing unnecessary overwrites and re-fetches.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -nc -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 9</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Ensure target directory exists</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">The script doesn't verify that the target directory exists before downloading files. This could cause wget to fail if the directory structure isn't already in place. Add a directory creation step before the download operation.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+
+mkdir -p "$TARGET_DIR"
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Add robust download options</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">The download command lacks error handling and could silently fail for individual URLs. Consider adding wget options to handle failures gracefully and provide better feedback on download status.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget --no-clobber --timeout=30 --tries=3 -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 10</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Create directory before downloading files</h3>
+                            <span class="label label-critical-bug">possible issue</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">The script doesn't verify if the target directory exists before downloading files. This could cause wget to fail if the directory is missing. Add a mkdir command to ensure the directory exists.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>TARGET_DIR="/usr/share/backgrounds/Chicago95/Wallpaper"
+
+mkdir -p "$TARGET_DIR"
+printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Add error handling to downloads</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">Using 10 parallel wget processes without error handling could overwhelm the server or fail silently. Consider adding wget options for retry and timeout, and check for download failures.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} sh -c 'wget --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 3 -P "$1" "$2" || exit 1' -- "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+        <div class="model-container">
+            <div class="model-header"><h2 class="model-title">Model 11</h2></div>
+            <div class="model-body">
+                
+                    <div class="suggestion-card">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-summary">Handle individual download failures.</h3>
+                            <span class="label label-general">general</span>
+                        </div>
+                        <div class="suggestion-body">
+                            <p>File: <span class="file-info">files/scripts/24-wallpapers.sh</span> | Language: <span class="file-info">bash</span></p>
+                            <div class="suggestion-content">The current script uses `set -e`, which will cause the script to exit immediately if any single `wget` command invoked by `xargs` fails. This prevents subsequent wallpapers from being downloaded if one fails. Iterate through the URLs using a loop and handle potential `wget` errors for each URL individually, allowing the script to continue attempting other downloads.</div>
+                            <div class="code-comparison">
+                                <div class="code-block existing-code">
+                                    <h5>Existing Code</h5>
+                                    <pre><code>printf "%s\n" "${URLS[@]}" | xargs -n 1 -P 10 -I{} wget -P "$TARGET_DIR" "{}"</code></pre>
+                                </div>
+                                <div class="code-block improved-code">
+                                    <h5>Improved Code</h5>
+                                    <pre><code>for url in "${URLS[@]}"; do
+  echo "Downloading: $url"
+  wget -P "$TARGET_DIR" "$url" || echo "WARNING: Failed to download $url" >&2
+done</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    
+</div>
+
+</body>
+</html>
