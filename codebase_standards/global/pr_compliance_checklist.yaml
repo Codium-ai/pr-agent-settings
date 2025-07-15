@@ -6,7 +6,7 @@ pr_compliances:
     failure_criteria: "Unjustified deep nesting that can be simplified by early return"
 
   - title: "Robust Error Handling"
-    compliance_label: true
+    compliance_label: false
     objective: "Ensure potential errors and edge cases are anticipated and handled gracefully throughout the code"
     success_criteria: "All error scenarios are properly caught and handled with appropriate responses"
     failure_criteria: "Unhandled exceptions, ignored errors, or missing edge case handling"
