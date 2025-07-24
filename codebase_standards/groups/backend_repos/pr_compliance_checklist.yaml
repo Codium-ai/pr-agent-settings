@@ -1,12 +1,6 @@
 pr_compliances:
- - title: "back-end: try-except for API calls"
-   compliance_label: true
-   objective: "When calling an API, always wrap it with try-except"
-   success_criteria: "API calls wrapped with a try-except"
-   failure_criteria: "API calls that are not wrapped with a try-except"
-
- - title: "back-end:W hen relevant, utilize early return"
+ - title: "No Magic Values or Strings"
    compliance_label: false
-   objective: "In a code snippet containing multiple logic conditions (such as 'if-else'), prefer an early return on edge cases than deep nesting"
-   success_criteria: "When relevant, utilize early return that reduces nesting"
-   failure_criteria: "Unjustified deep nesting that can be simplified by early return"
+   objective: "Unexplained numbers or strings are defined as named constants"
+   success_criteria: "All numbers and strings have descriptive constant names explaining their purpose"
+   failure_criteria: "Hard-coded numbers or strings without named constant definitions"
