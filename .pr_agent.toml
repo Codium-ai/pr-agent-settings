@@ -8,6 +8,7 @@ enable_review_labels_effort = true
 [pr_code_suggestions]
 focus_only_on_problems=true
 high_level_suggestions_enabled=true
+new_diff_format=true
 
 [best_practices]
 enable_global_best_practices = true
