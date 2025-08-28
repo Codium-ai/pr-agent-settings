@@ -3,6 +3,7 @@
 [config]
 new_diff_format=true
 new_diff_format_line_numbers=true
+new_diff_format_add_external_references=true
 
 
 [best_practices]
