@@ -1,4 +1,5 @@
-
+[pr_implement]
+allow_agent_implementation=true
 
 [config]
 new_diff_format=true
