@@ -27,3 +27,7 @@ push_commands = [
     "/compliance",
     "/agentic_review"  # experimental, avert production for now.
 ]
+
+[review_agent]
+enabled = true
+publish_output = true
