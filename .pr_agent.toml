@@ -13,3 +13,17 @@ organization_name="Qodo"
 
 [linear]
 linear_base_url = "https://linear.app/qodo"
+
+[github_app]
+pr_commands = [
+    "/describe --pr_description.final_update_message=false",
+    "/compliance",
+    "/improve",
+    "/agentic_review"  # experimental, avert production for now.
+]
+
+push_commands = [
+    "/describe",
+    "/compliance",
+    "/agentic_review"  # experimental, avert production for now.
+]
