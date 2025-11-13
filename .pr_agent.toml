@@ -22,6 +22,7 @@ pr_commands = [
     "/agentic_review"  # experimental, avert production for now.
 ]
 
+handle_push_trigger = true
 push_commands = [
     "/describe",
     "/compliance --update_compliance=true",
