@@ -17,7 +17,7 @@ linear_base_url = "https://linear.app/qodo"
 [github_app]
 pr_commands = [
     "/describe --pr_description.final_update_message=false",
-    "/compliance",
+    "/compliance --update_compliance=true",
     "/improve",
     "/agentic_review"  # experimental, avert production for now.
 ]
