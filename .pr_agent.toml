@@ -25,6 +25,7 @@ pr_commands = [
 push_commands = [
     "/describe",
     "/compliance",
+    "/improve",
     "/agentic_review"  # experimental, avert production for now.
 ]
 
