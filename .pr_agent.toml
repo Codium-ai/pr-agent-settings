@@ -26,8 +26,7 @@ handle_push_trigger = true
 push_commands = [
     "/describe",
     "/compliance --update_compliance=true",
-    "/improve",
-    "/agentic_review"  # experimental, avert production for now.
+    "/improve"
 ]
 
 [review_agent]
