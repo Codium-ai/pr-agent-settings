@@ -19,14 +19,15 @@ pr_commands = [
     "/describe --pr_description.final_update_message=false",
     "/compliance",
     "/improve",
-    "/agentic_review"  # experimental, avert production for now.
+    "/agentic_review"
 ]
 
 handle_push_trigger = true
 push_commands = [
     "/describe",
     "/compliance --update_compliance=true",
-    "/improve"
+    "/improve",
+    "/agentic_review"
 ]
 
 [review_agent]
