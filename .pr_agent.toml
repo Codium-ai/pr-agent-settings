@@ -33,8 +33,3 @@ push_commands = [
 [review_agent]
 enabled = true
 publish_output = true
-enable_issues_agent = true
-enable_compliance_agent = true
-judge_enabled = true
-
-
