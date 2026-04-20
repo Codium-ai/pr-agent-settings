@@ -33,8 +33,6 @@ linear_base_url = "https://linear.app/qodo"
 
 [review_agent]
 enabled = true
-publish_output = true
-enable_database_persistence = true
 prefer_single_line_comments = true
 enable_ui_agent = true
 
