@@ -35,7 +35,7 @@ linear_base_url = "https://linear.app/qodo"
 enabled = true
 prefer_single_line_comments = true
 enable_ui_agent = true
-
+enable_persona_agent = true
 
 [chat_agent]
 enabled = true
